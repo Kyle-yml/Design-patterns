@@ -1,0 +1,100 @@
+/*适配者模式 Adapter*/
+
+/********************************************************
+
+介绍：将一个类的接口转换成客户希望的另一个接口。适配器模式让那些接口不兼容的类可以一起工作。
+简单点说就是：我要把你改成我需要的样子。
+
+适配方法：类适配模式 和 对象适配模式
+
+类适配模式：适配器类通过继承适配者类，并重新实现适配者的具体接口来达到适配客户所需要的接口的目的
+对象适配模式：适配器类通过在类中实例化一个适配者类的对象，并将其封装在客户所需功能的接口里，达到最终的适配目的
+
+*********************************************************/
+/********************
+例子：画画者用具体的画画装备来画画 
+画画装备就是适配器
+适配者就是画笔类，形状类
+*/
+//目标抽象类 画画人
+class Drawer
+{
+public:
+	Drawer(){}
+	virtual void DrawPic() = 0;
+};
+
+
+//适配者类
+//画笔
+class DPen
+{
+public:
+	DPen(){}
+	void SetRedPen()
+	{
+		cout << "我是红色画笔" << endl;
+	}
+	void SetBlackPen()
+	{
+		cout << "我是黑色画笔" << endl;
+	}
+};
+//形状
+class DShape
+{
+public:
+	DShape(){}
+	void DrawCircle()
+	{
+		cout << "我要画圆形" << endl;
+	}
+	void DrawRectangle()
+	{
+		cout << "我要画矩形" << endl;
+	}
+};
+
+
+//适配器  对象适配器模式
+class CDrawCircle : public Drawer
+{
+public:
+	CDrawCircle(){}
+	void DrawPic()
+	{
+		m_Pen.SetRedPen();
+		m_Shape.DrawCircle();
+	}
+public:
+	DPen m_Pen;
+	DShape m_Shape;
+};
+
+//适配器  类适配器模式
+class CDrawRectangle : public Drawer, public DPen, public DShape
+{
+public:
+	CDrawRectangle(){}
+	void DrawPic()
+	{
+		SetBlackPen();
+		DrawRectangle();
+	}
+};
+
+
+/*
+int main()
+{
+	Drawer *draw = new CDrawCircle();
+	draw->DrawPic();
+	cout << endl;
+	Drawer *draw1 = new CDrawRectangle();
+	draw1->DrawPic();
+	cout << endl;
+
+	system("pause");
+	return 1;
+}
+*/
