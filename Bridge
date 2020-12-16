@@ -1,0 +1,127 @@
+#include "iostream"
+#include "string"
+using namespace std;
+
+/*桥接模式*/
+
+/********************************************************
+
+介绍：将抽象部分与实现部分分离，使它们都可以独立变换。
+
+这种模式涉及到一个作为桥接的接口，使得实体类的功能独立于接口实现类。这两种类型的类可被结构化改变而互不影响。
+
+主要解决：在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。
+何时使用：实现系统可能有多个角度分类，每一种角度都可能变化。
+如何解决：把这种多角度分类分离出来，让它们独立变化，减少它们之间耦合。
+
+优点： 1、抽象和实现的分离。 2、优秀的扩展能力。 3、实现细节对客户透明。
+缺点：桥接模式的引入会增加系统的理解与设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计与编程。
+*********************************************************/
+/********************
+例子：手机玩游戏，游戏不断新增，手机也会不断增加，手机需要安装游戏并玩游戏。
+*/
+
+//实现类
+class Game
+{
+public:
+	Game(){}
+	virtual void playGame() = 0;
+};
+
+//具体实现类  游戏A
+class GameA : public Game
+{
+public:
+	GameA(){}
+	void playGame()
+	{
+		cout << "玩游戏A" << endl;
+	}
+};
+
+//具体实现类  游戏B
+class GameB : public Game
+{
+public:
+	GameB(){}
+	void playGame()
+	{
+		cout << "玩游戏B" << endl;
+	}
+};
+
+
+//抽象类  手机类
+class Phone
+{
+public:
+	Phone(){}
+	virtual void SetupGame(Game *pGame) = 0; //安装游戏
+	virtual void playGame() = 0;			 //玩游戏
+};
+
+//抽象扩展类 手机A
+class PhoneA : public Phone
+{
+public:
+	PhoneA(){}
+	void SetupGame(Game *pGame)
+	{
+		m_pGame = pGame;
+	}
+	void playGame()
+	{
+		m_pGame->playGame();
+	}
+public:
+	Game * m_pGame;
+};
+
+//抽象扩展类 手机B
+class PhoneB : public Phone
+{
+public:
+	PhoneB(){}
+	void SetupGame(Game *pGame)
+	{
+		m_pGame = pGame;
+	}
+	void playGame()
+	{
+		m_pGame->playGame();
+	}
+public:
+	Game * m_pGame;
+};
+
+/*
+int main()
+{
+	Phone *pPhone1 = new PhoneA();
+	Phone *pPhone2 = new PhoneB();
+	Game *pGame1 = new GameA();
+	Game *pGame2 = new GameB();
+
+	pPhone1->SetupGame(pGame1);
+	pPhone1->playGame();
+	pPhone1->SetupGame(pGame2);
+	pPhone1->playGame();
+
+	pPhone2->SetupGame(pGame2);
+	pPhone2->playGame();
+
+	delete pPhone1;
+	delete pPhone2;
+	delete pGame1;
+	delete pGame2;
+
+	pPhone1 = NULL;
+	pPhone2 = NULL;
+	pGame1 = NULL;
+	pGame2 = NULL;
+
+	system("pause");
+	return 1;
+}
+*/
